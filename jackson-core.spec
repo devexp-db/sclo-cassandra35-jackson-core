@@ -41,7 +41,7 @@ This package contains javadoc for %{name}.
 %prep
 %setup -q -n %{name}-%{name}-%{version}
 
-%pom_xpath_remove "pom:build/pom:extensions/pom:extension[pom:artifactId='wagon-gitsite']"
+%pom_xpath_remove "pom:build/pom:extensions"
 # remove unavailable com.google.doclava doclava 1.0.3
 %pom_xpath_remove "pom:reporting/pom:plugins/pom:plugin[pom:artifactId='maven-javadoc-plugin']/pom:configuration"
 %pom_xpath_inject "pom:reporting/pom:plugins/pom:plugin[pom:artifactId='maven-javadoc-plugin']" '
