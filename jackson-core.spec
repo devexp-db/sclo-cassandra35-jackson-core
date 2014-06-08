@@ -20,7 +20,7 @@ BuildRequires: maven-install-plugin
 BuildRequires: maven-enforcer-plugin
 BuildRequires: maven-plugin-bundle
 BuildRequires: maven-source-plugin
-BuildRequires: maven-surefire-provider-junit4
+BuildRequires: maven-surefire-provider-junit
 BuildRequires: replacer
 
 Provides:      jackson2-core = %{version}-%{release}
