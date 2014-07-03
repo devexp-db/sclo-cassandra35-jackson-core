@@ -1,16 +1,16 @@
 Name:          jackson-core
-Version:       2.2.2
-Release:       5%{?dist}
+Version:       2.4.1
+Release:       1%{?dist}
 Summary:       Core part of Jackson
 License:       ASL 2.0
 URL:           http://wiki.fasterxml.com/JacksonHome
 Source0:       https://github.com/FasterXML/jackson-core/archive/%{name}-%{version}.tar.gz
-# jackson-core package don't include the license file
-# https://github.com/FasterXML/jackson-core/issues/88
-Source1:       http://www.apache.org/licenses/LICENSE-2.0.txt
 
-BuildRequires: java-devel
-BuildRequires: mvn(com.fasterxml:oss-parent) >= 10
+%if %{?fedora} > 20
+BuildRequires: mvn(com.fasterxml.jackson:jackson-parent:pom:)
+%else
+BuildRequires: mvn(com.fasterxml.jackson:jackson-parent)
+%endif
 
 # test deps
 BuildRequires: mvn(junit:junit)
@@ -41,7 +41,6 @@ This package contains javadoc for %{name}.
 %prep
 %setup -q -n %{name}-%{name}-%{version}
 
-%pom_xpath_remove "pom:build/pom:extensions"
 # remove unavailable com.google.doclava doclava 1.0.3
 %pom_xpath_remove "pom:reporting/pom:plugins/pom:plugin[pom:artifactId='maven-javadoc-plugin']/pom:configuration"
 %pom_xpath_inject "pom:reporting/pom:plugins/pom:plugin[pom:artifactId='maven-javadoc-plugin']" '
@@ -51,8 +50,9 @@ This package contains javadoc for %{name}.
   <source>${javac.src.version}</source>
 </configuration>'
 
-cp -p %{SOURCE1} .
-sed -i 's/\r//' LICENSE-2.0.txt
+cp -p src/main/resources/META-INF/LICENSE .
+cp -p src/main/resources/META-INF/NOTICE .
+sed -i 's/\r//' LICENSE NOTICE
 
 %build
 %mvn_file : %{name}
@@ -62,12 +62,15 @@ sed -i 's/\r//' LICENSE-2.0.txt
 %mvn_install
 
 %files -f .mfiles
-%doc LICENSE-2.0.txt README.md
+%doc LICENSE NOTICE README.md release-notes/*
 
 %files javadoc -f .mfiles-javadoc
-%doc LICENSE-2.0.txt
+%doc LICENSE NOTICE
 
 %changelog
+* Wed Jul 02 2014 gil cattaneo <puntogil@libero.it> 2.4.1-1
+- update to 2.4.1
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.2-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
