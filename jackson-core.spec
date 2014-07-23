@@ -1,5 +1,5 @@
 Name:          jackson-core
-Version:       2.4.1
+Version:       2.4.1.1
 Release:       1%{?dist}
 Summary:       Core part of Jackson
 License:       ASL 2.0
@@ -16,11 +16,6 @@ BuildRequires: mvn(com.fasterxml.jackson:jackson-parent)
 BuildRequires: mvn(junit:junit)
 
 BuildRequires: maven-local
-BuildRequires: maven-install-plugin
-BuildRequires: maven-enforcer-plugin
-BuildRequires: maven-plugin-bundle
-BuildRequires: maven-source-plugin
-BuildRequires: maven-surefire-provider-junit
 BuildRequires: replacer
 
 Provides:      jackson2-core = %{version}-%{release}
@@ -50,6 +45,8 @@ This package contains javadoc for %{name}.
   <source>${javac.src.version}</source>
 </configuration>'
 
+%pom_xpath_remove "pom:build/pom:plugins/pom:plugin[pom:artifactId='maven-javadoc-plugin']/pom:executions"
+
 cp -p src/main/resources/META-INF/LICENSE .
 cp -p src/main/resources/META-INF/NOTICE .
 sed -i 's/\r//' LICENSE NOTICE
@@ -68,6 +65,9 @@ sed -i 's/\r//' LICENSE NOTICE
 %doc LICENSE NOTICE
 
 %changelog
+* Wed Jul 23 2014 gil cattaneo <puntogil@libero.it> 2.4.1.1-1
+- update to 2.4.1.1
+
 * Wed Jul 02 2014 gil cattaneo <puntogil@libero.it> 2.4.1-1
 - update to 2.4.1
 
