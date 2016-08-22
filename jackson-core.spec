@@ -1,5 +1,5 @@
 Name:          jackson-core
-Version:       2.6.7
+Version:       2.7.6
 Release:       1%{?dist}
 Summary:       Core part of Jackson
 License:       ASL 2.0
@@ -58,6 +58,9 @@ sed -i 's/\r//' LICENSE NOTICE
 %license LICENSE NOTICE
 
 %changelog
+* Mon Aug 22 2016 gil cattaneo <puntogil@libero.it> 2.7.6-1
+- update to 2.7.6
+
 * Fri Jun 24 2016 gil cattaneo <puntogil@libero.it> 2.6.7-1
 - update to 2.6.7
 
