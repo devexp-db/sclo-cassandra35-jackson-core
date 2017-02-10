@@ -1,6 +1,6 @@
 Name:          jackson-core
 Version:       2.7.6
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       Core part of Jackson
 License:       ASL 2.0
 URL:           http://wiki.fasterxml.com/JacksonHome
@@ -58,6 +58,9 @@ sed -i 's/\r//' LICENSE NOTICE
 %license LICENSE NOTICE
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.7.6-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Mon Aug 22 2016 gil cattaneo <puntogil@libero.it> 2.7.6-1
 - update to 2.7.6
 
