@@ -1,31 +1,37 @@
-Name:          jackson-core
-Version:       2.7.6
-Release:       2%{?dist}
-Summary:       Core part of Jackson
-License:       ASL 2.0
-URL:           http://wiki.fasterxml.com/JacksonHome
-Source0:       https://github.com/FasterXML/jackson-core/archive/%{name}-%{version}.tar.gz
+%{?scl:%scl_package jackson-core}
+%{!?scl:%global pkg_name %{name}}
 
-BuildRequires: maven-local
-BuildRequires: mvn(com.fasterxml.jackson:jackson-parent:pom:)
-BuildRequires: mvn(com.google.code.maven-replacer-plugin:replacer)
-BuildRequires: mvn(junit:junit)
+Name:		%{?scl_prefix}jackson-core
+Version:	2.7.6
+Release:	3%{?dist}
+Summary:	Core part of Jackson
+License:	ASL 2.0
+URL:		http://wiki.fasterxml.com/JacksonHome
+Source0:	https://github.com/FasterXML/%{pkg_name}/archive/%{pkg_name}-%{version}.tar.gz
 
-BuildArch:     noarch
+BuildRequires:	%{?scl_prefix_maven}maven-local
+BuildRequires:	%{?scl_prefix}jackson-parent
+BuildRequires:	%{?scl_prefix}fasterxml-oss-parent
+BuildRequires:	%{?scl_prefix}replacer
+BuildRequires:	%{?scl_prefix_java_common}junit
+%{?scl:Requires: %scl_runtime}
+
+BuildArch:	noarch
 
 %description
 Core part of Jackson that defines Streaming API as well
 as basic shared abstractions.
 
 %package javadoc
-Summary:       Javadoc for %{name}
+Summary:	Javadoc for %{name}
 
 %description javadoc
 This package contains javadoc for %{name}.
 
 %prep
-%setup -q -n %{name}-%{name}-%{version}
+%setup -q -n %{pkg_name}-%{pkg_name}-%{version}
 
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 # remove unavailable com.google.doclava doclava 1.0.3
 %pom_xpath_remove "pom:reporting/pom:plugins/pom:plugin[pom:artifactId='maven-javadoc-plugin']/pom:configuration"
 %pom_xpath_inject "pom:reporting/pom:plugins/pom:plugin[pom:artifactId='maven-javadoc-plugin']" '
@@ -41,14 +47,18 @@ cp -p src/main/resources/META-INF/LICENSE .
 cp -p src/main/resources/META-INF/NOTICE .
 sed -i 's/\r//' LICENSE NOTICE
 
-%mvn_file : %{name}
+%mvn_file : %{pkg_name}
+%{?scl:EOF}
 
 %build
-
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %mvn_build -- -Dmaven.test.failure.ignore=true
+%{?scl:EOF}
 
 %install
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %mvn_install
+%{?scl:EOF}
 
 %files -f .mfiles
 %doc README.md release-notes/*
@@ -58,6 +68,9 @@ sed -i 's/\r//' LICENSE NOTICE
 %license LICENSE NOTICE
 
 %changelog
+* Mon Mar 06 2017 Tomas Repik <trepik@redhat.com> - 2.7.6-3
+- scl conversion
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.7.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
